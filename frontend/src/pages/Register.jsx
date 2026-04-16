@@ -6,7 +6,6 @@ export default function Register() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [role, setRole] = useState('user');
     const [error, setError] = useState('');
     const { register } = useAuth();
     const navigate = useNavigate();
@@ -14,7 +13,7 @@ export default function Register() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await register(username, email, password, role);
+            await register(username, email, password);
             navigate('/');
         } catch (err) {
             setError(err.response?.data?.message || 'Registration failed');
@@ -38,13 +37,6 @@ export default function Register() {
                     <div className="form-group">
                         <label>Password</label>
                         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} />
-                    </div>
-                    <div className="form-group">
-                        <label>Role</label>
-                        <select value={role} onChange={(e) => setRole(e.target.value)}>
-                            <option value="user">User</option>
-                            <option value="admin">Admin</option>
-                        </select>
                     </div>
                     <button type="submit">Sign Up</button>
                 </form>

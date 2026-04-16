@@ -2,12 +2,7 @@ const Task = require('../models/Task');
 
 const getTasks = async (req, res) => {
     try {
-        let tasks = [];
-        if (req.user.role === 'admin') {
-            tasks = await Task.findAll(); // admins see everything
-        } else {
-            tasks = await Task.findAll({ where: { userId: req.user.id } });
-        }
+        const tasks = await Task.findAll({ where: { userId: req.user.id } });
         res.json(tasks);
     } catch (err) {
         console.error("fetch tasks error: ", err);
@@ -21,7 +16,7 @@ const getTask = async (req, res) => {
 
         if (!t) return res.status(404).json({ error: "Task not found" });
 
-        if (t.userId !== req.user.id && req.user.role !== 'admin') {
+        if (t.userId !== req.user.id) {
              return res.status(403).json({ error: "unauthorized" });
         }
 
@@ -58,7 +53,7 @@ const updateTask = async (req, res) => {
 
         if (!t) return res.status(404).send("task not found!");
 
-        if (t.userId !== req.user.id && req.user.role !== 'admin') {
+        if (t.userId !== req.user.id) {
              return res.status(403).send("you don't own this task");
         }
 
@@ -76,7 +71,7 @@ const deleteTask = async (req, res) => {
 
         if (!t) return res.status(404).json({ msg: "task doesn't exist" });
 
-        if (t.userId !== req.user.id && req.user.role !== 'admin') {
+        if (t.userId !== req.user.id) {
              return res.status(403).send("Not authorized");
         }
 

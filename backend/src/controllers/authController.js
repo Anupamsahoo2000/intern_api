@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 const register = async (req, res) => {
-    let { username, email, password, role } = req.body;
+    let { username, email, password } = req.body;
 
     if (!username || !email || !password) {
         return res.status(400).send("Need all fields to register");
@@ -19,20 +19,16 @@ const register = async (req, res) => {
         let salt = await bcrypt.genSalt(10);
         let hashed = await bcrypt.hash(password, salt);
 
-        // if role is not admin, default to user
-        let assignedRole = role === 'admin' ? 'admin' : 'user';
-
         let createdUser = await User.create({
             username: username,
             email: email,
-            password_hash: hashed,
-            role: assignedRole
+            password_hash: hashed
         });
 
-        const token = jwt.sign({ id: createdUser.id, role: createdUser.role }, process.env.JWT_SECRET, { expiresIn: '1d' });
+        const token = jwt.sign({ id: createdUser.id }, process.env.JWT_SECRET, { expiresIn: '1d' });
 
         res.status(201).json({
-            user: { id: createdUser.id, username: createdUser.username, email: createdUser.email, role: createdUser.role },
+            user: { id: createdUser.id, username: createdUser.username, email: createdUser.email },
             token: token
         });
 
@@ -60,10 +56,10 @@ const login = async (req, res) => {
             return res.status(401).json({ error: "Invalid credentials" });
         }
 
-        let generatedToken = jwt.sign({ id: u.id, role: u.role }, process.env.JWT_SECRET, { expiresIn: '1d' });
+        let generatedToken = jwt.sign({ id: u.id }, process.env.JWT_SECRET, { expiresIn: '1d' });
 
         res.json({
-            user: { id: u.id, username: u.username, role: u.role },
+            user: { id: u.id, username: u.username },
             token: generatedToken
         });
 

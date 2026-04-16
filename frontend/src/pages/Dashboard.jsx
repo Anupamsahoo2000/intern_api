@@ -61,7 +61,7 @@ export default function Dashboard() {
                 <div>
                     <h1>Dashboard</h1>
                     <p style={{ color: 'var(--text-secondary)', marginTop: '0.5rem' }}>
-                        Welcome, <strong>{user?.username}</strong> <span className="status-badge status-pending" style={{marginLeft: '10px'}}>{user?.role}</span>
+                        Welcome, <strong>{user?.username}</strong>
                     </p>
                 </div>
                 <button onClick={logout} style={{ width: 'auto', padding: '0.5rem 1rem', background: 'transparent', border: '1px solid var(--primary-color)' }}>
