@@ -1,6 +1,6 @@
 # Intern Assignment - Auth & Task API
 
-T It's a full-stack app with a Node.js backend and a React frontend.
+ It's a full-stack app with a Node.js backend and a React frontend.
 
 ## What it does
 
